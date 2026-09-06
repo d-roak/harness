@@ -1,0 +1,5 @@
+{
+  "name": "harness",
+  "owner": { "name": "d-roak" },
+  "plugins": [{ "name": "harness", "source": "./", "description": "Lifecycle rules, skills and workflows." }]
+}

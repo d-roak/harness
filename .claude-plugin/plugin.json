@@ -1,0 +1,7 @@
+{
+  "name": "harness",
+  "version": "0.1.0",
+  "description": "Rules, skills and workflows for the full software lifecycle: plan, build, test, review, audit, ship.",
+  "author": { "name": "d-roak" },
+  "skills": ["./skills/"]
+}
