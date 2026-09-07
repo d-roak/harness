@@ -25,7 +25,7 @@
 - Ask: would a staff engineer approve this diff? If not, keep going.
 
 ## After a correction
-- Write down the pattern that caused it, in the repo's `AGENTS.md` or the user's notes. The mistake should be impossible to repeat, not just unlikely.
+- Record it: `memory add feedback <slug> "<what>"` with why and how to avoid it in the body. If it is a repo trap everyone should know, put it in the repo's `AGENTS.md` instead. The mistake should be impossible to repeat, not just unlikely.
 
 ## Simplicity
 - Simplest thing that works. Stdlib before a dependency, platform feature before a library, one line before fifty.

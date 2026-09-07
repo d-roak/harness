@@ -6,10 +6,13 @@ Written for any coding agent (Claude Code, Codex, OpenCode) — plain markdown, 
 ## How this is organised
 
 - `rules/common/` — always on. Workflow, git, style, testing, security.
-- `rules/<lang>.md` — read when working in that language. typescript, rust, python, solidity, infra.
+- `rules/<lang>.md` — read on demand. typescript, rust, python, solidity, infra, and for anything visual: design, media.
 - `skills/<name>/SKILL.md` — a procedure the agent runs on demand. Each one says when to use it and what it does not cover.
 - `workflows/` — which skills to chain, in what order, for a feature, a bugfix, a release.
 - `templates/` — starters for a repo: `AGENTS.md`, CI workflows.
+- `mcp/` — the MCP servers every tool gets: blender, playwright, chrome-devtools, higgsfield, fal.
+- `hooks/` — mechanical guards: no force push, no push to main, no `.env` edits. Same scripts for every tool.
+- `bin/memory` — facts that outlive a session, in `~/.agents/memory`. The session-start hook shows the index.
 
 ## The lifecycle
 
@@ -19,7 +22,9 @@ plan  →  tdd / implement  →  review  →  verify  →  ship
                  ↑ audit (before anything touches money, auth or prod)
 ```
 
-Skills map to those stages one to one. A feature goes through all of them. A typo fix goes through `verify` and `ship`.
+Skills map to those stages one to one. `memory` runs underneath: recall at start, record after a correction.
+
+Creative work has its own stages: `brand` → `copy` → `imagegen` / `videogen` / `blender` → `design` → `implement`. Same review and verify gates. See `workflows/landing-page.md`, `media.md`, `3d.md`. A feature goes through all of them. A typo fix goes through `verify` and `ship`.
 
 ## Non-negotiables
 
@@ -31,6 +36,7 @@ Read `rules/common/*.md`. The short version:
 4. Simplest change that works. No abstractions for one caller. Delete before you add.
 5. Reject bad input loudly. No silent fallbacks, no empty catch.
 6. Phosphor icons, pnpm, Vitest, Prettier. Not Lucide, npm, Jest, Biome.
+7. No slop. Text passes `writing.md`, interfaces pass `design.md`, generated media passes `media.md`. The model's default output is the thing to avoid.
 
 ## Stack
 

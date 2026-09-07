@@ -9,11 +9,17 @@ Works with Claude Code, Codex and OpenCode. Everything is plain markdown in the 
 ```
 AGENTS.md          instructions every tool loads: lifecycle, non-negotiables, stack
 rules/common/      always on: workflow, git, style, testing, security
-rules/<lang>.md    read on demand: typescript, rust, python, solidity, infra
-skills/<name>/     plan, tdd, implement, debug, review, audit, verify, ship, handoff
-workflows/         feature, bugfix, release: which skills, in which order
+rules/<lang>.md    read on demand: typescript, rust, python, solidity, infra, design, media
+skills/<name>/     plan, tdd, implement, debug, review, audit, verify, ship, handoff, memory
+                   brand, copy, design, imagegen, videogen, blender
+workflows/         feature, bugfix, release, landing-page, media, 3d: which skills, in which order
+mcp/               one server list, registered into every tool by the installer
 templates/         per-repo AGENTS.md starter, CI workflows for node, rust, foundry
+hooks/             guards and formatter, one set of scripts, adapters per tool
+bin/memory         file-based memory shared by every tool
+docs/              longer-form pages, start at docs/index.md
 install.sh         links it all into ~/.agents, ~/.claude, ~/.codex, ~/.config/opencode
+test.sh            block/allow cases for every guard and the memory CLI
 ```
 
 ## Install
@@ -23,7 +29,9 @@ git clone git@github.com:d-roak/harness.git ~/code/harness
 ~/code/harness/install.sh
 ```
 
-The script symlinks each skill into the skills directory of every tool and writes a managed block (`AGENTS.md` plus `rules/common`) into each tool's global instructions file. Anything outside the block is left alone. Re-run after pulling.
+The script symlinks skills into `~/.agents/skills` and `~/.claude/skills`, writes a managed block (`AGENTS.md` plus `rules/common`) into each tool's global instructions file, merges the hooks into Claude Code and Codex settings, drops an OpenCode plugin, and puts `memory` on your PATH. Anything outside the managed block is left alone. Re-run after pulling.
+
+Memory lives in `~/.agents/memory`, one fact per file, never in a repo. Hooks block force pushes, pushes to main, edits to `.env` and lockfiles, and npm in pnpm repos. See `docs/`.
 
 Claude Code can also take it as a plugin:
 
@@ -47,6 +55,10 @@ plan  →  tdd / implement  →  review  →  verify  →  ship
 ```
 
 Each skill says when to use it and which sibling to use instead. Workflows chain them.
+
+## Taste
+
+The model's default output is the baseline to beat. `rules/common/writing.md` bans the words and shapes that mark text as generated. `rules/design.md`, distilled from leonxlnx/taste-skill, does the same for interfaces: named slop patterns, dials set before code, a pre-flight that has to be ticked honestly. `rules/media.md` covers image, video and 3D: prompts as specs, a written bible per set, one deliverable per image, regenerate instead of crop.
 
 ## Adding a skill
 

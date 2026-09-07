@@ -1,0 +1,24 @@
+{
+  "blender": {
+    "command": ["uvx", "blender-mcp"],
+    "note": "once: uvx blender-mcp install-addon, enable the addon in Blender, press N > MCP > Start MCP Server"
+  },
+  "playwright": {
+    "command": ["npx", "-y", "@playwright/mcp@latest"],
+    "note": "accessibility snapshots, screenshots, console, network, clicks"
+  },
+  "chrome-devtools": {
+    "command": ["npx", "-y", "chrome-devtools-mcp@latest"],
+    "note": "performance traces and Core Web Vitals for the design pre-flight"
+  },
+  "higgsfield": {
+    "url": "https://mcp.higgsfield.ai/mcp",
+    "auth": "oauth",
+    "note": "image, video, audio, 3D generation. Claude Code and Codex run the OAuth flow on first use (codex mcp login higgsfield)"
+  },
+  "fal": {
+    "url": "https://mcp.fal.ai/mcp",
+    "bearer_env": "FAL_KEY",
+    "note": "any fal model: image, video, upscale. Needs FAL_KEY in the environment"
+  }
+}

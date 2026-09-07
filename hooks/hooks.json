@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      { "hooks": [ { "type": "command", "command": "$HARNESS_DIR/hooks/session-start.sh" } ] }
+    ],
+    "PreToolUse": [
+      { "matcher": "Bash", "hooks": [ { "type": "command", "command": "$HARNESS_DIR/hooks/guard-bash.sh" } ] },
+      { "matcher": "Edit|Write|MultiEdit|apply_patch", "hooks": [ { "type": "command", "command": "$HARNESS_DIR/hooks/guard-edit.sh" } ] }
+    ],
+    "PostToolUse": [
+      { "matcher": "Edit|Write|MultiEdit|apply_patch", "hooks": [ { "type": "command", "command": "$HARNESS_DIR/hooks/format.sh" } ] }
+    ]
+  }
+}

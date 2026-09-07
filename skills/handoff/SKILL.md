@@ -22,3 +22,4 @@ Under 300 words. Written for someone who has the repo but not this conversation.
 
 ## Not this skill
 - Summarising for a PR: `ship`.
+- Facts worth keeping beyond this task: `memory`.
