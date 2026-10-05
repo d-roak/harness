@@ -15,7 +15,7 @@ Add the line with a one-clause reason to the right file in `rules/`. Common if i
 
 1. A shell script in `hooks/`, JSON on stdin, `exit 2` with a message on stderr to block, `exit 0` otherwise. Match on the raw JSON text so it works across tools.
 2. Add a case to `test.sh` that proves it blocks and a case that proves it allows.
-3. Wire it in `hooks/claude.json` and the other adapters.
+3. Wire it in `hooks/hooks.json` and the other adapters.
 
 ## An MCP server
 

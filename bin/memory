@@ -15,7 +15,16 @@ set -eu
 ROOT="${HARNESS_MEMORY_DIR:-$HOME/.agents/memory}"
 TYPES="user feedback project reference"
 
-repo_name() { basename "$(git rev-parse --show-toplevel 2>/dev/null || echo "")"; }
+repo_name() {
+	common="$(git rev-parse --git-common-dir 2>/dev/null || true)"
+	[ -n "$common" ] || return 0
+	common="$(cd "$common" && pwd)"
+	basename "$(dirname "$common")"
+}
+
+valid_slug() {
+	echo "$1" | grep -Eq '^[a-z0-9][a-z0-9-]*$'
+}
 
 scope_dir() {
 	if [ "${1:-}" = "--repo" ]; then
@@ -29,6 +38,7 @@ scope_dir() {
 
 reindex() {
 	dir="$1"; idx="$dir/MEMORY.md"
+	mkdir -p "$dir"
 	: > "$idx"
 	for f in "$dir"/*.md; do
 		[ "$f" = "$idx" ] && continue
@@ -42,10 +52,11 @@ reindex() {
 cmd="${1:-}"; [ $# -gt 0 ] && shift
 case "$cmd" in
 add)
-	type="${1:?type}"; slug="${2:?slug}"; desc="${3:?description}"
+	type="${1:?type}"; slug="${2:?slug}"; desc="${3:?description}"; scope="${4:-}"
 	case " $TYPES " in *" $type "*) ;; *) echo "memory: type must be one of: $TYPES" >&2; exit 1;; esac
-	echo "$slug" | grep -Eq '^[a-z0-9][a-z0-9-]*$' || { echo "memory: slug must be kebab-case" >&2; exit 1; }
-	dir="$(scope_dir "${4:-}")"; mkdir -p "$dir"
+	valid_slug "$slug" || { echo "memory: slug must be kebab-case" >&2; exit 1; }
+	printf '%s' "$desc" | grep -Eq '^[^[:cntrl:]:#]+$' || { echo "memory: description must be one line without : or #" >&2; exit 1; }
+	dir="$(scope_dir "$scope")"; mkdir -p "$dir"
 	body="$(cat)"
 	printf -- '---\nname: %s\ndescription: %s\ntype: %s\ncreated: %s\n---\n\n%s\n' \
 		"$slug" "$desc" "$type" "$(date +%F)" "$body" > "$dir/$slug.md"
@@ -53,11 +64,13 @@ add)
 list)
 	dir="$(scope_dir "${1:-}")"; [ -f "$dir/MEMORY.md" ] && cat "$dir/MEMORY.md" || true ;;
 show)
-	slug="${1:?slug}"; dir="$(scope_dir "${2:-}")"; cat "$dir/$slug.md" ;;
+	slug="${1:?slug}"; valid_slug "$slug" || { echo "memory: slug must be kebab-case" >&2; exit 1; }
+	dir="$(scope_dir "${2:-}")"; cat "$dir/$slug.md" ;;
 search)
 	term="${1:?term}"; [ -d "$ROOT" ] && grep -ril -- "$term" "$ROOT" --include='*.md' --exclude=MEMORY.md || true ;;
 rm)
-	slug="${1:?slug}"; dir="$(scope_dir "${2:-}")"; rm -f "$dir/$slug.md"; reindex "$dir" ;;
+	slug="${1:?slug}"; valid_slug "$slug" || { echo "memory: slug must be kebab-case" >&2; exit 1; }
+	dir="$(scope_dir "${2:-}")"; rm -f "$dir/$slug.md"; reindex "$dir" ;;
 context)
 	if [ -s "$ROOT/global/MEMORY.md" ]; then echo "## memory: global"; cat "$ROOT/global/MEMORY.md"; fi
 	r="$(repo_name)"

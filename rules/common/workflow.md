@@ -15,6 +15,12 @@
 - Found a real problem with the task as specified? Say so in two sentences, then build it anyway under stated assumptions.
 - Blocked on part of it? Finish every other part in full, then say what was left out and why.
 
+## External clients
+- Map the provider boundary before code. Keep provider-specific code behind one boundary.
+- Use a sandbox or test endpoint where available. Bound timeouts and retries.
+- External writes must be idempotent or explicitly approved. Never invent, print, or persist credentials.
+- Continue autonomously unless access is missing, the contract is ambiguous, or the next action is irreversible or production-facing.
+
 ## Subagents
 - Offload research, exploration and parallel analysis. Keep the main context for decisions.
 - One task per subagent. Give it the exit criteria, not just the topic.

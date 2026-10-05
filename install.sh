@@ -13,7 +13,14 @@ END='<!-- harness:end -->'
 
 link_skills() {
 	mkdir -p "$1"
-	for s in "$HARNESS_DIR"/skills/*/; do ln -sfn "$s" "$1/$(basename "$s")"; done
+	for s in "$HARNESS_DIR"/skills/*/; do
+		dest="$1/$(basename "$s")"
+		if [ -e "$dest" ] && [ ! -L "$dest" ]; then
+			echo "skills: refusing to replace existing path: $dest" >&2
+			return 1
+		fi
+		ln -sfn "$s" "$dest"
+	done
 	echo "skills -> $1"
 }
 
@@ -43,8 +50,13 @@ path, hd = sys.argv[1], os.environ["HARNESS_DIR"]
 cfg = json.load(open(path))
 ours = json.loads(open(f"{hd}/hooks/hooks.json").read().replace("$HARNESS_DIR", hd))["hooks"]
 hooks = cfg.setdefault("hooks", {})
+if not isinstance(hooks, dict):
+    raise SystemExit(f"{path}: hooks must be an object")
 for event, entries in ours.items():
-    kept = [e for e in hooks.get(event, []) if not any(hd in h.get("command", "") for h in e.get("hooks", []))]
+    current = hooks.get(event, [])
+    if not isinstance(current, list) or any(not isinstance(entry, dict) or not isinstance(entry.get("hooks", []), list) for entry in current):
+        raise SystemExit(f"{path}: hooks.{event} must be a list of hook objects")
+    kept = [entry for entry in current if not any(isinstance(hook, dict) and hd in hook.get("command", "") for hook in entry["hooks"])]
     hooks[event] = kept + entries
 json.dump(cfg, open(path, "w"), indent=2); open(path, "a").write("\n")
 PY
@@ -53,6 +65,8 @@ PY
 
 link_skills "$HOME/.agents/skills"
 link_skills "$HOME/.claude/skills"
+link_skills "$HOME/.codex/skills"
+link_skills "$HOME/.config/opencode/skill"
 
 write_block "$HOME/.claude/CLAUDE.md"
 write_block "$HOME/.codex/AGENTS.md"

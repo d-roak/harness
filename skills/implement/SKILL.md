@@ -9,6 +9,7 @@ description: Build a planned task in an existing codebase, matching its patterns
 1. Read the repo's `AGENTS.md`, then the language rules for what you are touching.
 2. Find the nearest existing example of the same kind of thing (a handler, a component, a migration). Copy its shape. Do not invent a second convention.
 3. Run the gate once before changing anything so you know what "green" looked like.
+4. For a third-party client, build one vertical path first: strict input, provider call at one boundary, normalized result or error, bounded timeout. Use the existing SDK or native `fetch`; defer abstractions until a second provider or caller exists.
 
 ## While writing
 - Smallest diff. Fewest files. Delete before adding.
@@ -21,6 +22,7 @@ description: Build a planned task in an existing codebase, matching its patterns
 ## After writing
 - Run the gate. Paste the tail of the output, not "tests pass".
 - Non-trivial logic leaves one runnable check behind (see `tdd`).
+- For external writes, verify idempotency or replay safety. State a skipped production smoke first when credentials or approval are unavailable.
 - Update docs the change made wrong. Do not add docs the change does not need.
 - Hand over to `review` for anything beyond a one-liner.
 
