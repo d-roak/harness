@@ -5,15 +5,18 @@ description: Commit, branch, PR, and deploy by the house rules. Only runs on an 
 
 # ship
 
-Each action below needs its own explicit instruction from the user. "commit" does not include push. "push" does not include a PR. Never touch `main` directly.
+Each action below needs its own explicit instruction from the user. "commit" does not include push. "push" does not include a PR. By default, do not commit or push directly to `main`; an exception requires explicit permission for that action in the repository's `AGENTS.md`.
 
 ## commit
+
+- If on `main`, create a feature branch first unless the repository's `AGENTS.md` explicitly permits direct commits to `main`.
 - `git status` and `git diff` first. Stage only what the task changed.
 - Conventional Commits, one-line subject: `type(scope): description`. No body. No attribution trailers.
 - One logical change per commit.
 
 ## push
-- To the current feature branch. If on `main`, create a branch first (`type/short-name`) and say so.
+
+- Push to the current feature branch. If on `main`, create a branch first (`type/short-name`) and say so, unless the repository's `AGENTS.md` explicitly permits direct pushes to `main`.
 - Never force-push a shared branch.
 
 ## pr

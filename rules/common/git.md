@@ -2,7 +2,7 @@
 
 - Never commit, push, branch on a remote, open a PR, or create a repo unless explicitly told to. Passing tests and a good stopping point are not permission.
 - One instruction, one action. "commit" is not "commit and push".
-- Never push to `main`. Branch, then PR.
+- By default, do not commit or push directly to `main`. Use a feature branch and PR unless the repository's `AGENTS.md` explicitly permits the direct action. Each commit or push still requires an explicit user instruction.
 - Conventional Commits, one-line subject, no body: `feat(web): add landing page`, `fix(api): reject empty cursor`.
 - Types: feat, fix, chore, refactor, docs, test, ci, style, perf, build.
 - No AI attribution anywhere: no `Co-Authored-By`, no "Generated with". Commits are authored by the human.
