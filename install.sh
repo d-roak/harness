@@ -80,7 +80,8 @@ echo "hooks  -> $HOME/.config/opencode/plugins/harness.js"
 
 "$HARNESS_DIR/mcp/install.sh"
 
-mkdir -p "$HOME/.local/bin"; ln -sfn "$HARNESS_DIR/bin/memory" "$HOME/.local/bin/memory"
-echo "memory -> $HOME/.local/bin/memory (make sure ~/.local/bin is on PATH)"
+mkdir -p "$HOME/.local/bin"
+for tool in memory create-verification-skill; do ln -sfn "$HARNESS_DIR/bin/$tool" "$HOME/.local/bin/$tool"; done
+echo "tools -> $HOME/.local/bin (make sure ~/.local/bin is on PATH)"
 
 echo "done. Codex asks you to trust new hooks once: run /hooks inside codex."

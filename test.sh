@@ -72,6 +72,17 @@ mkdir -p "$HOME/.agents/skills/plan"
 ( ./install.sh >/dev/null 2>&1 ) && bad "installer replaced skill directory" || ok
 [ ! -e "$HOME/.agents/skills/plan/plan" ] && ok || bad "installer nested skill link"
 
+# verification template
+fixture="$(mktemp -d)"; git -C "$fixture" init -q
+bin/create-verification-skill "$fixture" >/dev/null
+node "$fixture/.claude/skills/verify-app/control-app.test.mjs" && ok || bad "verification template"
+test -f "$fixture/.claude/skills/verify-app/references/features/example-feature.md" && ok || bad "verification feature map"
+grep -q '## Sub-features' "$fixture/.claude/skills/verify-app/references/features/example-feature.md" && grep -q 'multi-surface-journeys.md' "$fixture/.claude/skills/verify-app/references/features/README.md" && ok || bad "verification feature map shape"
+mkdir "$fixture/nested"
+bin/create-verification-skill "$fixture/nested" >/dev/null 2>&1 && bad "verification generator accepted nested target" || ok
+bin/create-verification-skill "$fixture" >/dev/null 2>&1 && bad "verification generator overwrote skill" || ok
+rm -rf "$fixture"
+
 # guard-edit
 E=hooks/guard-edit.sh
 blocks $E '{"tool_input":{"file_path":"/x/app/.env"}}'

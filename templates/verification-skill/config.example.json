@@ -1,0 +1,6 @@
+{
+  "origin": "http://localhost:3000",
+  "devCommand": "fill this in",
+  "testData": "fill reset/seed procedure",
+  "auth": "fill test-user procedure"
+}

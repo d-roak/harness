@@ -13,6 +13,7 @@ Written for any coding agent (Claude Code, Codex, OpenCode) — plain markdown, 
 - `mcp/` — the MCP servers every tool gets: blender, playwright, chrome-devtools, higgsfield, fal.
 - `hooks/` — mechanical guards: no force push, no push to main, no `.env` edits. Same scripts for every tool.
 - `bin/memory` — facts that outlive a session, in `~/.agents/memory`. The session-start hook shows the index.
+- `bin/create-verification-skill` — creates a repository-local runtime CLI and Feature Map for app verification.
 
 ## The lifecycle
 

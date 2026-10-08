@@ -33,6 +33,10 @@
 ## After a correction
 - Record it: `memory add feedback <slug> "<what>"` with why and how to avoid it in the body. If it is a repo trap everyone should know, put it in the repo's `AGENTS.md` instead. The mistake should be impossible to repeat, not just unlikely.
 
+## Build the lever
+- Do the first unit manually. Repeated mechanical work earns one small script, hook, or generator plus a negative test.
+- Keep judgment in skills. Reuse the repository's tooling before adding a wrapper.
+
 ## Simplicity
 - Simplest thing that works. Stdlib before a dependency, platform feature before a library, one line before fifty.
 - No interface with one implementation, no factory for one product, no config for a value that never changes.

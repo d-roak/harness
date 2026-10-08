@@ -10,13 +10,13 @@ Works with Claude Code, Codex and OpenCode. Everything is plain markdown in the 
 AGENTS.md          instructions every tool loads: lifecycle, non-negotiables, stack
 rules/common/      always on: workflow, git, style, testing, security
 rules/<lang>.md    read on demand: typescript, rust, python, solidity, infra, design, media
-skills/<name>/     plan, tdd, implement, debug, review, audit, verify, ship, handoff, memory
+skills/<name>/     plan, tdd, implement, debug, review, audit, verify, verification, ship, handoff, memory
                    brand, copy, design, imagegen, videogen, blender
 workflows/         feature, bugfix, release, landing-page, media, 3d: which skills, in which order
 mcp/               one server list, registered into every tool by the installer
 templates/         per-repo AGENTS.md starter, CI workflows for node, rust, foundry
 hooks/             guards and formatter, one set of scripts, adapters per tool
-bin/memory         file-based memory shared by every tool
+bin/               memory plus app-verification-skill generator
 docs/              longer-form pages, start at docs/index.md
 install.sh         links it all into ~/.agents, ~/.claude, ~/.codex, ~/.config/opencode
 test.sh            block/allow cases for every guard and the memory CLI
@@ -31,7 +31,7 @@ git clone git@github.com:d-roak/harness.git ~/code/harness
 
 The script symlinks skills into `~/.agents/skills` and `~/.claude/skills`, writes a managed block (`AGENTS.md` plus `rules/common`) into each tool's global instructions file, merges the hooks into Claude Code and Codex settings, drops an OpenCode plugin, and puts `memory` on your PATH. Anything outside the managed block is left alone. Re-run after pulling.
 
-Memory lives in `~/.agents/memory`, one fact per file, never in a repo. Hooks block force pushes, pushes to main, edits to `.env` and lockfiles, and npm in pnpm repos. See `docs/`.
+Memory lives in `~/.agents/memory`, one fact per file, never in a repo. `create-verification-skill <repo>` creates that app's local control CLI and Feature Map. Hooks block force pushes, pushes to main, edits to `.env` and lockfiles, and npm in pnpm repos. See `docs/`.
 
 Claude Code can also take it as a plugin:
 

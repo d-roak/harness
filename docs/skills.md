@@ -14,6 +14,7 @@ Each skill is one directory under `skills/` with a `SKILL.md`. Frontmatter: `nam
 | `ship` | commit, push, PR, deploy, one action per instruction | nothing |
 | `handoff` | note for the next session | nothing |
 | `memory` | recall at start, record after corrections | everything |
+| `verification` | create or maintain app-local control CLI and Feature Map | `verify` |
 | `copy` | words without slop: UI strings, pages, docs, notes | `design`, `implement` |
 | `brand` | identity and design system as a `DESIGN.md` | `imagegen`, `design` |
 | `design` | audit, dials, layout plan, pre-flight for a UI | `implement` |

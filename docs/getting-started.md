@@ -33,6 +33,7 @@ The session-start hook prints your memory index. The agent reads `AGENTS.md`, th
 - clear request: `implement`
 - something broken: `debug`
 - before saying done: `verify`
+- app runtime lacks repeatable controls: `verification`
 - on your instruction only: `ship`
 - anything a person will look at or read: `design`, `copy`, `imagegen`
 

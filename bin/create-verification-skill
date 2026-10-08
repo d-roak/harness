@@ -1,0 +1,16 @@
+#!/usr/bin/env sh
+# Creates an app-owned verification skill. It never installs dependencies or starts services.
+set -eu
+
+[ $# -eq 1 ] || { echo "usage: create-verification-skill <repository-path>" >&2; exit 1; }
+target="$(python3 -c 'import os, sys; print(os.path.realpath(sys.argv[1]))' "$1")"
+root="$(git -C "$target" rev-parse --show-toplevel 2>/dev/null)" || { echo "verification: target must be a Git repository" >&2; exit 1; }
+root="$(python3 -c 'import os, sys; print(os.path.realpath(sys.argv[1]))' "$root")"
+[ "$target" = "$root" ] || { echo "verification: target must be the repository root" >&2; exit 1; }
+destination="$root/.claude/skills/verify-app"
+[ ! -e "$destination" ] || { echo "verification: destination exists: $destination" >&2; exit 1; }
+source_dir="$(cd "$(dirname "$0")/../templates/verification-skill" && pwd)"
+mkdir -p "$target/.claude/skills"
+cp -R "$source_dir" "$destination"
+printf 'verification: created %s\n' "$destination"
+printf 'verification: fill config.example.json, then rename it config.json before running control-app.mjs\n'

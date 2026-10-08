@@ -7,6 +7,10 @@
 3. Add a row to `docs/skills.md` and, if it is a lifecycle stage, `docs/lifecycle.md`.
 4. Run `./install.sh` to link it. Run `./test.sh`.
 
+## An app verification skill
+
+Run `create-verification-skill <repo>`. It writes an app-owned `.claude/skills/verify-app/` CLI and Feature Map. Fill local runtime, test-data reset, and test-user instructions before running it. Keep Feature Map files behavior-level with the required headings. Never place credentials or shared profiles in the global harness.
+
 ## A rule
 
 Add the line with a one-clause reason to the right file in `rules/`. Common if it applies to every language, otherwise the language file. Re-run `install.sh` so the managed block picks it up.
