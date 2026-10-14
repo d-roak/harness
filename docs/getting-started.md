@@ -7,7 +7,20 @@ git clone git@github.com:d-roak/harness.git ~/code/harness
 ~/code/harness/install.sh
 ```
 
-What that does:
+No argument runs `all`: shared skills and tools, then Claude, Codex, OpenCode, and MCP setup.
+
+Install one target without touching the other target paths:
+
+```sh
+~/code/harness/install.sh claude
+~/code/harness/install.sh codex
+~/code/harness/install.sh opencode
+~/code/harness/install.sh mcp
+```
+
+Allowed targets: `all`, `claude`, `codex`, `opencode`, `mcp`. Unknown or extra arguments fail before writing. `mcp/install.sh` remains an MCP-only compatibility command.
+
+What `all` does:
 
 | Piece | Where it lands |
 |---|---|
@@ -17,7 +30,7 @@ What that does:
 | MCP servers | `~/.claude.json`, `~/.codex/config.toml`, `~/.config/opencode/opencode.json`, see [mcp.md](mcp.md) |
 | `bin/memory` | symlink in `~/.local/bin` |
 
-The managed block sits between `<!-- harness:start -->` and `<!-- harness:end -->`. Everything outside it is yours and untouched. Re-run the script after every `git pull`.
+The managed block sits between `<!-- harness:start -->` and `<!-- harness:end -->`. Everything outside it is yours and untouched. Harness replaces only its marked configuration; unowned name collisions remain yours. A conflicting non-symlink skill path stops installation. Each file replacement is atomic, but a later failure does not roll back earlier target writes. Re-run the script after every `git pull`.
 
 ## Wire a repo
 

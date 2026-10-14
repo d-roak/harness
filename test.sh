@@ -72,6 +72,48 @@ mkdir -p "$HOME/.agents/skills/plan"
 ( ./install.sh >/dev/null 2>&1 ) && bad "installer replaced skill directory" || ok
 [ ! -e "$HOME/.agents/skills/plan/plan" ] && ok || bad "installer nested skill link"
 
+# target installer
+install_home="$(mktemp -d)"
+run_install() { HOME="$install_home/$1" ./install.sh "$1"; }
+for target in claude codex opencode mcp; do
+	run_install "$target" | grep -qx "$target: done" && ok || bad "installer $target output"
+done
+[ -f "$install_home/claude/.claude/CLAUDE.md" ] && [ ! -e "$install_home/claude/.codex/AGENTS.md" ] && ok || bad "installer claude isolation"
+[ -f "$install_home/codex/.codex/AGENTS.md" ] && [ ! -e "$install_home/codex/.claude/CLAUDE.md" ] && ok || bad "installer codex isolation"
+[ -f "$install_home/opencode/.config/opencode/AGENTS.md" ] && [ ! -e "$install_home/opencode/.claude/CLAUDE.md" ] && ok || bad "installer opencode isolation"
+[ -f "$install_home/mcp/.claude.json" ] && [ ! -e "$install_home/mcp/.claude/CLAUDE.md" ] && ok || bad "installer mcp isolation"
+[ ! -e "$install_home/claude/.agents" ] && [ ! -e "$install_home/codex/.agents" ] && [ ! -e "$install_home/opencode/.agents" ] && [ ! -e "$install_home/mcp/.agents" ] && ok || bad "installer target skips shared phase"
+invalid_home="$install_home/invalid"
+HOME="$invalid_home" ./install.sh unknown >/dev/null 2>&1 && bad "installer accepted unknown target" || ok
+[ ! -e "$invalid_home" ] && ok || bad "installer wrote unknown target"
+HOME="$invalid_home" ./install.sh claude extra >/dev/null 2>&1 && bad "installer accepted extra argument" || ok
+[ ! -e "$invalid_home" ] && ok || bad "installer wrote extra argument"
+HOME="$install_home/all" ./install.sh > "$install_home/all.out"
+grep -qx 'shared: done' "$install_home/all.out" && grep -qx 'claude: done' "$install_home/all.out" && grep -qx 'codex: done' "$install_home/all.out" && grep -qx 'opencode: done' "$install_home/all.out" && grep -qx 'mcp: done' "$install_home/all.out" && grep -qx 'all: done' "$install_home/all.out" && ok || bad "installer all targets"
+[ -L "$install_home/all/.agents/skills/plan" ] && [ -L "$install_home/all/.local/bin/memory" ] && ok || bad "installer shared phase"
+all_before="$(find "$install_home/all" -type f -exec shasum {} \; | sort)"
+HOME="$install_home/all" ./install.sh >/dev/null
+all_after="$(find "$install_home/all" -type f -exec shasum {} \; | sort)"
+[ "$all_before" = "$all_after" ] && ok || bad "installer all idempotence"
+mcp_home="$install_home/mcp-wrapper"
+HOME="$mcp_home" ./install.sh mcp >/dev/null
+from_target="$(cat "$mcp_home/.claude.json" "$mcp_home/.codex/config.toml" "$mcp_home/.config/opencode/opencode.json")"
+rm -rf "$mcp_home"
+HOME="$mcp_home" ./mcp/install.sh >/dev/null
+from_wrapper="$(cat "$mcp_home/.claude.json" "$mcp_home/.codex/config.toml" "$mcp_home/.config/opencode/opencode.json")"
+[ "$from_target" = "$from_wrapper" ] && ok || bad "mcp compatibility wrapper"
+managed_home="$install_home/managed"
+mkdir -p "$managed_home/.claude"
+printf '%s\n' 'before' '<!-- harness:start -->' 'old' '<!-- harness:end -->' 'after' > "$managed_home/.claude/CLAUDE.md"
+HOME="$managed_home" ./install.sh claude >/dev/null
+grep -q '^before$' "$managed_home/.claude/CLAUDE.md" && grep -q '^after$' "$managed_home/.claude/CLAUDE.md" && ! grep -q '^old$' "$managed_home/.claude/CLAUDE.md" && ok || bad "installer replaces managed block"
+broken_home="$install_home/broken"
+mkdir -p "$broken_home/.config/opencode"
+printf '{' > "$broken_home/.config/opencode/opencode.json"
+HOME="$broken_home" ./install.sh all >/dev/null 2>&1 && bad "installer accepted invalid mcp JSON" || ok
+[ -f "$broken_home/.claude/CLAUDE.md" ] && [ -L "$broken_home/.agents/skills/plan" ] && ok || bad "installer leaves earlier writes on later failure"
+rm -rf "$install_home"
+
 # verification template
 fixture="$(mktemp -d)"; git -C "$fixture" init -q
 bin/create-verification-skill "$fixture" >/dev/null
