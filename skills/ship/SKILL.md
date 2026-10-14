@@ -5,24 +5,29 @@ description: Commit, branch, PR, and deploy by the house rules. Only runs on an 
 
 # ship
 
-Each action below needs its own explicit instruction from the user. "commit" does not include push. "push" does not include a PR. By default, do not commit or push directly to `main`; an exception requires explicit permission for that action in the repository's `AGENTS.md`.
+Each action below needs its own explicit instruction from the user. "commit" does not include push. "push" does not include a PR. Default flow: feature branch, PR, green CI/review, then merge. Direct `main` work requires an explicit request for that exact action.
 
 ## commit
 
-- If on `main`, create a feature branch first unless the repository's `AGENTS.md` explicitly permits direct commits to `main`.
+- If on `main`, create a feature branch first unless the user explicitly requested a direct commit to `main`.
 - `git status` and `git diff` first. Stage only what the task changed.
 - Conventional Commits, one-line subject: `type(scope): description`. No body. No attribution trailers.
 - One logical change per commit.
 
 ## push
 
-- Push to the current feature branch. If on `main`, create a branch first (`type/short-name`) and say so, unless the repository's `AGENTS.md` explicitly permits direct pushes to `main`.
+- Push to the current feature branch. If on `main`, create a branch first (`type/short-name`) unless the user explicitly requested a direct push to `main`.
 - Never force-push a shared branch.
 
 ## pr
 - `gh pr create` against `main`. Title is the commit subject. Body: what changed, why, how it was verified (paste the gate tail), what is out of scope.
 - No attribution lines. No "Generated with".
 - CI must be green before asking for review.
+
+## merge
+
+- Merge an approved PR after CI is green, only when the user explicitly requests the merge.
+- Direct merge to `main` requires an explicit user request for that exact action and completed verification.
 
 ## deploy
 Check the target and confirm with the user unless they named it:

@@ -2,7 +2,7 @@
 
 ## Plan first
 - Any task with three or more steps, or an architectural choice, starts with a plan. Write it down before touching code.
-- Check the plan with the user before implementing when different readings of the request lead to different work. Otherwise pick the sensible reading and say which one.
+- Continue autonomously after stating the sensible reading. Pause only when the next action is materially ambiguous, irreversible, production-facing, credential/access-changing, or an external write.
 - If the plan stops matching reality, stop and re-plan. Do not push through.
 
 ## Change vs investigate
@@ -19,7 +19,7 @@
 - Map the provider boundary before code. Keep provider-specific code behind one boundary.
 - Use a sandbox or test endpoint where available. Bound timeouts and retries.
 - External writes must be idempotent or explicitly approved. Never invent, print, or persist credentials.
-- Continue autonomously unless access is missing, the contract is ambiguous, or the next action is irreversible or production-facing.
+- Continue autonomously unless access is missing or the next action is materially ambiguous, irreversible, production-facing, credential/access-changing, or an external write. Ask at that boundary; ordinary planning, coding, review, and verification need no approval gate.
 
 ## Subagents
 - Offload research, exploration and parallel analysis. Keep the main context for decisions.

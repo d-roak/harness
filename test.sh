@@ -34,7 +34,7 @@ G=hooks/guard-bash.sh
 blocks $G '{"tool_input":{"command":"git push --force origin feat"}}'
 blocks $G '{"tool_input":{"command":"git push -f"}}'
 blocks $G '{"tool_input":{"command":"git push --force-with-lease origin feat"}}'
-blocks $G '{"tool_input":{"command":"git push github main"}}'
+allows $G '{"tool_input":{"command":"git push github main"}}'
 blocks $G '{"tool_input":{"command":"git commit -m x --no-verify"}}'
 blocks $G '{"tool_input":{"command":"git commit -m \\"x\\" --no-verify"}}'
 blocks $G '{"tool_input":{"command":"git reset --hard HEAD~1"}}'

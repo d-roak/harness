@@ -30,7 +30,7 @@ description: Turn a vague request into a spec, a decision record when needed, an
 
 4. **Tasks.** Ordered list, each one shippable on its own, each with its verification command. Small enough that a reviewer can hold the diff in their head.
 
-5. **Check in** if the plan touches something the user did not mention (a migration, a public API, a cost). Otherwise proceed with the plan visible at the top of the response.
+5. **Proceed.** Present the plan, state any unmentioned scope as an assumption, then implement without waiting for approval. Pause only at the boundaries in `rules/common/workflow.md`.
 
 ## Output
 The spec and task list, in the reply. Persist to a GitHub issue if the work outlives the session. Never a todo file in the repo.

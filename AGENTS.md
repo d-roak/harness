@@ -11,7 +11,7 @@ Written for any coding agent (Claude Code, Codex, OpenCode) — plain markdown, 
 - `workflows/` — which skills to chain, in what order, for a feature, a bugfix, a release.
 - `templates/` — starters for a repo: `AGENTS.md`, CI workflows.
 - `mcp/` — the MCP servers every tool gets: blender, playwright, chrome-devtools, higgsfield, fal.
-- `hooks/` — mechanical guards: no force push, no push to main, no `.env` edits. Same scripts for every tool.
+- `hooks/` — mechanical guards: no force push, no `.env` edits. Same scripts for every tool.
 - `bin/memory` — facts that outlive a session, in `~/.agents/memory`. The session-start hook shows the index.
 - `bin/create-verification-skill` — creates a repository-local runtime CLI and Feature Map for app verification.
 
@@ -33,7 +33,7 @@ Read `rules/common/*.md`. The short version:
 
 1. Plan before any task with three or more steps. Re-plan when it goes sideways.
 2. Nothing is done until it is proven: run the gate, show the output.
-3. Never commit, push, or open a PR unless told to. One instruction, one action.
+3. Default: feature branch, PR, green CI/review, merge. Never commit, push, open a PR, or merge unless told to. Direct `main` actions need an explicit request for that exact action.
 4. Simplest change that works. No abstractions for one caller. Delete before you add.
 5. Reject bad input loudly. No silent fallbacks, no empty catch.
 6. Phosphor icons, pnpm, Vitest, Prettier. Not Lucide, npm, Jest, Biome.

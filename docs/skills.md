@@ -13,7 +13,7 @@ Each skill is one directory under `skills/` with a `SKILL.md`. Frontmatter: `nam
 | `quote-create` | draft a buyer-ready project quote or proposal | `copy`, `design`, `implement` for delivery |
 | `audit` | security walk from entry points to assets | `debug` / `implement` for fixes, then `audit` again |
 | `verify` | gate, behaviour, negative check, scope check | `ship` |
-| `ship` | commit, push, PR, deploy, one action per instruction | nothing |
+| `ship` | commit, push, PR, merge, deploy, one action per instruction | nothing |
 | `handoff` | note for the next session | nothing |
 | `memory` | recall at start, record after corrections | everything |
 | `verification` | create or maintain app-local control CLI and Feature Map | `verify` |

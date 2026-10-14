@@ -28,10 +28,6 @@ for part in re.split(r"(?:&&|\|\||;|\n)", os.environ["COMMAND"]):
         if any(arg == "-f" or arg.startswith("-f") or arg == "--force" or arg.startswith("--force=") or arg.startswith("--force-with-lease") for arg in args):
             print("No force push. Rebase locally, push a new branch if you must.")
             raise SystemExit
-        positional = [arg for arg in args if not arg.startswith("-")]
-        if positional and positional[-1] in {"main", "master"}:
-            print("Never push to main. Branch and PR.")
-            raise SystemExit
     if words[:2] in (["git", "commit"], ["git", "push"]) and "--no-verify" in words[2:]:
         print("--no-verify skips the gate. Fix what the hook complains about.")
         raise SystemExit
